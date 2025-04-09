@@ -1,0 +1,11 @@
+services:
+  db:
+    image: postgres:17.4-bookworm
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: CaseTecnicoMeetimeHubSpot
+
+    ports:
+      - "5432:5432"
