@@ -44,10 +44,16 @@ public class ApiExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
+    @ExceptionHandler(ConflictDataException.class)
+    public ResponseEntity<DefaultErrorResponse> handleConflictDataException(ConflictDataException e) {
+        DefaultErrorResponse errorResponse = new DefaultErrorResponse(HttpStatus.CONFLICT.value(), e.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<DefaultErrorResponse> handleException(Exception e) {
         log.error("Unexpected error: {}", e.getMessage());
-        DefaultErrorResponse errorResponse = new DefaultErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
+        DefaultErrorResponse errorResponse = new DefaultErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal Server Error");
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
 }

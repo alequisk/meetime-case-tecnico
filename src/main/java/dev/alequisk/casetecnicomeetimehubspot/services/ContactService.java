@@ -1,10 +1,10 @@
 package dev.alequisk.casetecnicomeetimehubspot.services;
 
 import dev.alequisk.casetecnicomeetimehubspot.configs.HubSpotConfig;
-import dev.alequisk.casetecnicomeetimehubspot.exceptions.InternalApiException;
+import dev.alequisk.casetecnicomeetimehubspot.dtos.CreateContactRequest;
+import dev.alequisk.casetecnicomeetimehubspot.exceptions.ConflictDataException;
 import dev.alequisk.casetecnicomeetimehubspot.exceptions.RateLimitReachException;
 import dev.alequisk.casetecnicomeetimehubspot.exceptions.UnauthorizedException;
-import dev.alequisk.casetecnicomeetimehubspot.dtos.CreateContactRequest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -48,8 +48,8 @@ public class ContactService {
             throw new RateLimitReachException("Rate limit exceeded");
         } catch (HttpClientErrorException.Unauthorized e) {
             throw new UnauthorizedException("Unauthorized");
-        } catch (Exception e) {
-            throw new InternalApiException("An error occurred while trying create a contact");
+        } catch (HttpClientErrorException.Conflict e) {
+            throw new ConflictDataException("Contact already exists");
         }
     }
 }
