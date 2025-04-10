@@ -11,9 +11,8 @@ public class WebhookService {
     public void processWebhookEvents(List<Map<String, Object>> events) {
         for (Map<String, Object> event : events) {
             if ("contact.creation".equals(event.get("subscriptionType"))) {
-                Long contactId = Long.valueOf(event.get("objectId").toString());
-                System.out.println("Webhook: Novo contato criado com ID: " + contactId);
-                // Ações adicionais podem ser feitas aqui
+                long contactId = Long.parseLong(event.get("objectId").toString());
+                System.out.println("Novo contato: " + contactId);
             }
         }
     }

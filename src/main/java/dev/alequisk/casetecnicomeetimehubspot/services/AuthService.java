@@ -1,8 +1,11 @@
 package dev.alequisk.casetecnicomeetimehubspot.services;
 
 import dev.alequisk.casetecnicomeetimehubspot.configs.HubSpotConfig;
-import dev.alequisk.casetecnicomeetimehubspot.exceptions.MissingOrUnknownClientSecretAuthException;
-import dev.alequisk.casetecnicomeetimehubspot.exceptions.MissingOrUnknownCodeAuthException;
+import dev.alequisk.casetecnicomeetimehubspot.dtos.TokenResponse;
+import dev.alequisk.casetecnicomeetimehubspot.exceptions.InvalidTokenException;
+import dev.alequisk.casetecnicomeetimehubspot.exceptions.UnauthorizedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -11,14 +14,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.Map;
-
 @Service
 public class AuthService {
+    private final Logger log = LoggerFactory.getLogger(AuthService.class);
 
     private final HubSpotConfig config;
     private final RestTemplate restTemplate;
@@ -37,13 +38,13 @@ public class AuthService {
                 .toUriString();
     }
 
-    public Map<String, Object> exchangeCodeForToken(String code) throws MissingOrUnknownClientSecretAuthException {
-
+    public TokenResponse exchangeCodeForToken(String code) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
             MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+
             body.add("grant_type", "authorization_code");
             body.add("client_id", config.getClientId());
             body.add("client_secret", config.getClientSecret());
@@ -51,15 +52,34 @@ public class AuthService {
             body.add("code", code);
 
             HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
-
-            ResponseEntity<Map> response = restTemplate.postForEntity(config.getTokenUrl(), request, Map.class);
+            ResponseEntity<TokenResponse> response = restTemplate.postForEntity(config.getTokenUrl(), request, TokenResponse.class);
 
             return response.getBody();
         } catch (HttpClientErrorException.BadRequest e) {
-            if (e.getMessage().contains("missing or invalid client secret")) {
-                throw new MissingOrUnknownClientSecretAuthException(e);
-            }
-            throw new RuntimeException(e);
+            log.info("Unauthorized exception: {}", e.getMessage());
+            throw new UnauthorizedException("Unauthorized");
+        }
+    }
+
+    public TokenResponse executeRefreshToken(String refreshToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+            MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+
+            body.add("grant_type", "refresh_token");
+            body.add("refresh_token", refreshToken);
+            body.add("client_id", config.getClientId());
+            body.add("client_secret", config.getClientSecret());
+
+            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
+            ResponseEntity<TokenResponse> response = restTemplate.postForEntity(config.getTokenUrl(), request, TokenResponse.class);
+
+            return response.getBody();
+        } catch (HttpClientErrorException.BadRequest e) {
+            log.info("Invalid refresh token: {}", e.getMessage());
+            throw new InvalidTokenException("Access token is invalid");
         }
     }
 }
