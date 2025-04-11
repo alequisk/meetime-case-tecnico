@@ -30,10 +30,11 @@ public class AuthService {
     }
 
     public String generateAuthorizationUrl() {
+        String scopes = String.join(" ", config.getScopes());
         return UriComponentsBuilder.fromHttpUrl(config.getAuthUrl())
                 .queryParam("client_id", config.getClientId())
                 .queryParam("redirect_uri", config.getRedirectUri())
-                .queryParam("scope", config.getScopes())
+                .queryParam("scope", scopes)
                 .queryParam("response_type", "code")
                 .toUriString();
     }

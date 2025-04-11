@@ -51,7 +51,7 @@ Exemplo de URL gerada (destacada em amarelo)
 
 ### 2. Criando um App no HubSpot
 
-Acesse sua conta de desenvolvedor e crie um novo aplicativo:
+Acesse sua [conta de desenvolvedor](https://br.developers.hubspot.com/) e crie um novo aplicativo:
 
 1. Vá até **Aplicativos** → **Criar novo aplicativo**
 2. Defina nome e descrição
@@ -67,12 +67,12 @@ Acesse sua conta de desenvolvedor e crie um novo aplicativo:
 
 1. Acesse a aba **Recursos → Webhooks**
 2. Defina a URL de destino como:
-   `https://<NGROK_URL>/webhook/contacts`
+   `https://<NGROK_URL>/webhook/contacts` e depois no botão salvar.
 3. Crie uma assinatura com:
     - Tipo de objeto: `Contato`
     - Evento: `Criado`
     - ![Configuração de WebHook](./assets/webhook-scopes.png)
-4. Ative o evento após criação
+4. Após selecione o novo registro 'Contato' e ative o evento.
 
 ---
 
@@ -95,7 +95,7 @@ REDIRECT_URL=https://<NGROK_URL>
 Após configurar o arquivo `docker-compose.yml`, inicie o container com:
 
 ```bash
-docker-compose up --build
+docker compose up --build
 ```
 
 A partir daqui poderá ser feito chamadas HTTP para os endpoints em `https://<NGROK_URL>` e responder na API que estará rodando localmente:
