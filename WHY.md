@@ -69,6 +69,10 @@ Para melhor tratar as exceções lançadas pelas camadas de _Service_ foram cria
 
 Além disso, todas essas exceções lançadas de maneira independente no código são capturadas pela classe `ApiExceptionHandler` que faz o retorno padronizado de mensagens para o usuário.
 
+## Menções
+
+1. Foi realizado apenas a verificação se o cabeçalho `X-HubSpot-Signature-v3` está presente, sem a real validação se o recurso veio de fato da HubSpot, sendo uma melhoria futura de segurança a ser implementada.
+2. A quantidade de requições feitas para a API do HubSpot é limitado a 80 requisições a cada 10 segundos, um limite inferior ao real [limite de 100 req a cada 10 segundos](https://developers.hubspot.com/docs/guides/apps/api-usage/usage-details#rate-limits) para evitar atingir o limite da API.
 
 ## Melhorias Futuras
 
