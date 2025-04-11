@@ -95,3 +95,7 @@ Para aumentar a resiliência, segurança e auditabilidade da aplicação, as seg
 
 5. **Criação de testes**
     Criando testes será possível validar a aplicação e testar integração a novas features desenvolvidas posteriormente de maneira automática.
+
+6. **Hospedagem em Cloud**
+
+    Fazer com que o ele possua uma hospedagem em cloud onde o webhook seja acessível publicamente, onde recomendo que seja feita em ambiente Kubernetes. 
