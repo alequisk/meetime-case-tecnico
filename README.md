@@ -2,6 +2,9 @@
 
 Este projeto foi desenvolvido como parte do teste técnico da Meetime, com foco em realizar operações de integração entre uma API local e o CRM da HubSpot.
 
+
+[Documentação sobre uso das tecnologias](./WHY.md)
+
 ---
 
 ## 🔧 Tecnologias Utilizadas
@@ -39,6 +42,9 @@ Em seguida, execute:
 docker run --net=host -it -e NGROK_AUTHTOKEN=<TOKEN> ngrok/ngrok:latest http 8080
 ```
 
+Exemplo de URL gerada (destacada em amarelo)
+![URL do Ngrok](./assets/ngok-url.png)
+
 > O terminal exibirá uma URL pública (ex: `https://xyz123.ngrok-free.app`) que será utilizada para expor sua API local à internet.
 
 ---
@@ -50,8 +56,8 @@ Acesse sua conta de desenvolvedor e crie um novo aplicativo:
 1. Vá até **Aplicativos** → **Criar novo aplicativo**
 2. Defina nome e descrição
 3. Em **Autenticação**:
-    - No campo **URLs de redirecionamento**, adicione:  
-      `https://<NGROK_URL>/auth/callback`
+    - No campo **URLs de redirecionamento**, adicione: `https://<NGROK_URL>/auth/callback`
+      ![Campo de URL de redirecionamento](./assets/authentication-redirect.png)
     - Em **Escopos**, adicione o seguintes escopos como **obrigatórios**:
         - `crm.objects.contacts.read`
         - `crm.objects.contacts.write`
@@ -65,6 +71,7 @@ Acesse sua conta de desenvolvedor e crie um novo aplicativo:
 3. Crie uma assinatura com:
     - Tipo de objeto: `Contato`
     - Evento: `Criado`
+    - ![Configuração de WebHook](./assets/webhook-scopes.png)
 4. Ative o evento após criação
 
 ---

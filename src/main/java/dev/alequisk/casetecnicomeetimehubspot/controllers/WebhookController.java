@@ -6,10 +6,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -33,7 +30,11 @@ public class WebhookController {
             @ApiResponse(responseCode = "200", description = "Webhook processado com sucesso")
     })
     @PostMapping
-    public ResponseEntity<?> handleWebhook(@RequestBody List<Map<String, Object>> events) {
+    public ResponseEntity<?> handleWebhook(@RequestBody List<Map<String, Object>> events, @RequestHeader("X-HubSpot-Signature-v3") String xHubSpotSignatureV3 ) {
+        if (xHubSpotSignatureV3 == null) {
+            throw new RuntimeException("Request is missing X-HubSpot-Signature-v3");
+        }
+
         webhookService.processWebhookEvents(events);
         return ResponseEntity.ok().build();
     }

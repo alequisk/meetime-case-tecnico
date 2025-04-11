@@ -1,0 +1,7 @@
+README.md
+WHY.md
+docker-compose.yml
+.gitignore
+.idea
+.mvn
+/assets

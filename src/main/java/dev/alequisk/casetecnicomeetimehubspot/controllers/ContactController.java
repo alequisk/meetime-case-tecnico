@@ -2,9 +2,7 @@ package dev.alequisk.casetecnicomeetimehubspot.controllers;
 
 import dev.alequisk.casetecnicomeetimehubspot.dtos.CreateContactRequest;
 import dev.alequisk.casetecnicomeetimehubspot.services.ContactService;
-import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
-import io.github.bucket4j.Refill;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -32,9 +30,8 @@ public class ContactController {
 
     @PostConstruct
     public void setupBucket() {
-        Bandwidth limit = Bandwidth.classic(100, Refill.greedy(100, Duration.ofMinutes(1)));
         this.bucket = Bucket.builder()
-                .addLimit(limit)
+                .addLimit(limit -> limit.capacity(40).refillGreedy(10, Duration.ofMinutes(1)))
                 .build();
     }
 
