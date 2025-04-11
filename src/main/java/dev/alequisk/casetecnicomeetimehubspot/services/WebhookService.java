@@ -15,7 +15,7 @@ public class WebhookService {
         for (Map<String, Object> event : events) {
             if ("contact.creation".equals(event.get("subscriptionType"))) {
                 long contactId = Long.parseLong(event.get("objectId").toString());
-                log.info("Processing contact creation event {}", contactId);
+                log.info("[CREATED NEW CONTACT] Processing contact creation event {}", contactId);
                 // TODO: Ativação de ações automáticas ou envio de notificações para outros sistemas como WhatsApp, Telegram, Slack etc.
             }
         }

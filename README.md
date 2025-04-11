@@ -80,6 +80,8 @@ Acesse sua [conta de desenvolvedor](https://br.developers.hubspot.com/) e crie u
 
 Acesse as credenciais do app criado no HubSpot (em **Autenticação**) e substitua as variáveis de ambiente no arquivo [`docker-compose.yml`](./docker-compose.yml):
 
+![Aba de secrets](./assets/secrets.png)
+
 ```env
 HUBSPOT_CLIENT_ID=xxx
 HUBSPOT_CLIENT_SECRET=xxx
@@ -102,6 +104,30 @@ A partir daqui poderá ser feito chamadas HTTP para os endpoints em `https://<NG
 
 ---
 
+### Primeiros passos para acessar a API
+
+1. Autorize a API acessado [https://<NGROK_URL>/auth/url](https://<NGROK_URL>/auth/url) e posteriormente acessar o link no atributo `authorization_url`.
+2. Após autorizado seu aplicativo ao escrever e ler os recursos de contato da sua conta ele deverá ser redirecionado para o callback, onde será mostrado o `Access Token` e o `Refresh Token`.
+3. Para criar o usuário deve ser passado os atributos `firstname`, `lastname` e `email` (não necessariamente preenchidos) no corpo da requisição POST no endpoint [https://<NGROK_URL>/contacts](https://<NGROK_URL>/contacts), passando como cabeçalho o Bearer Token recebido na etapa 2.
+   1. **Exemplo de requisição**
+   ```shell
+   curl --request POST \
+     --url https://xyz123.ngrok-free.app/contacts \
+     --header 'Authorization: Bearer <ACCESS_TOKEN> \
+     --header 'Content-Type: application/json' \
+     --data '{
+           "email": "alexsousa1435@gmail.com",
+           "lastname": "Sousa",
+           "firstname": "Álex"
+   }'
+   ```
+4. Quando enviada a requisição, será possível ver no log da aplicação a seguinte linha:
+   `[CREATED NEW CONTACT] Processing contact creation event <ID>`
+
+Para outros detalhes, poderá ser visto a documentação no Swagger através da url [https://<NGROK_URL>/swagger-ui.html](https://<NGROK_URL>/swagger-ui.html).
+
+--- 
+
 ## 📑 Documentação do Fluxo da Integração
 
 Abaixo está o fluxo básico de integração entre usuário, API e HubSpot:
@@ -115,30 +141,11 @@ flowchart TD
     E --> F[Webhook envia notificação para API local]
 ```
 
-Para a documentação das rotas dentro do projeto, visite [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html) para ver a documentação feita pelo Swagger usando OpenAPI. 
-
----
-
-### Criando novo contato
-
-Após acessar a url de autorização gerada no `https://<NGOK_URL>/auth/url` e receber o access token da aplicação, você poderá ler  
-
-```shell
-curl --request POST \
-  --url https://<NGROK_URL>/contacts \
-  --header 'Authorization: Bearer <ACCESS_TOKEN>' \
-  --header 'Content-Type: application/json' \
-  --data '{
-		"email": "alexsousa1435@gmail.com",
-		"lastname": "Sousa",
-		"firstname": "Alex"
-  }'
-```
+Para a documentação das rotas dentro do projeto, visite [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html) para ver a documentação feita pelo Swagger usando OpenAPI.
 
 
 ---
 
 ## 📬 Contato
 
-Caso tenha dúvidas ou sugestões, fique à vontade para entrar em contato.  
-Este projeto foi construído para demonstrar domínio técnico em integrações com APIs externas, autenticação OAuth2, e uso de webhooks.
+Caso tenha dúvidas ou sugestões, fique à vontade para entrar em contato.

@@ -4,8 +4,8 @@ services:
       context: .
     container_name: hubspot-integration-api
     environment:
-      HUBSPOT_CLIENT_ID: 2f6f53fc-fed8-4f2b-9ac0-715b357d393e
-      HUBSPOT_CLIENT_SECRET: 3b7f1055-f2bf-4109-ad5c-ffb22890415e
-      REDIRECT_URL: https://7ca0-45-174-191-122.ngrok-free.app
+      HUBSPOT_CLIENT_ID: <CLIENT_ID>
+      HUBSPOT_CLIENT_SECRET: <CLIENT_SECRET>
+      REDIRECT_URL: https://<NGROK_URL>
     ports:
       - "8080:8080"
