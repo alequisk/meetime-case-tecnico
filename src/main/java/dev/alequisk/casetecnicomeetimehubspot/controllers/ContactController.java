@@ -31,7 +31,7 @@ public class ContactController {
     @PostConstruct
     public void setupBucket() {
         this.bucket = Bucket.builder()
-                .addLimit(limit -> limit.capacity(40).refillGreedy(10, Duration.ofMinutes(1)))
+                .addLimit(limit -> limit.capacity(80).refillGreedy(80, Duration.ofSeconds(10)))
                 .build();
     }
 

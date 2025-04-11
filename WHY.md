@@ -16,6 +16,9 @@ Conforme solicitado no teste técnico, a proposta consiste na criação de uma A
 - **Bucket4j**  
   Biblioteca de controle de taxa (rate limiting) utilizada para limitar requisições ao endpoint de criação de contatos, prevenindo sobrecarga da API e garantindo aderência às políticas de uso do HubSpot.
 
+- **OpenAPI Docs**
+  Para documentar a API da aplicação Spring.
+
 ---
 
 ## Arquitetura do Projeto
